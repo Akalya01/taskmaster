@@ -15,6 +15,6 @@ deploy:
           docker rm frontend-poc || true
           docker run -d \
             --name frontend-poc \
-            -p 4000:4000 \
+            -p 4000:3000 \
             --restart unless-stopped \
             ${{ secrets.DOCKERHUB_USERNAME }}/frontend-app-poc:latest

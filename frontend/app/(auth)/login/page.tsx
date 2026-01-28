@@ -41,7 +41,7 @@ export default function Login() {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A10.003 10.003 0 0012 3c1.72 0 3.347.433 4.774 1.202m0 0a10.05 10.05 0 013.478 3.99m-2.255 10.586A10.012 10.012 0 0112 21c-3.191 0-6.086-1.496-7.985-3.826m5-9.852V4.62m0 0V3m0 1.62H9m3 0h1m-2 4.5h.01" />
           </svg>
         </div>
-        <h2 className="text-4xl font-black text-slate-900 tracking-tighter mb-2 font-sans">TaskMaster</h2>
+        <h2 className="text-4xl font-black text-slate-900 tracking-tighter mb-2 font-sans">Task Master</h2>
         <p className="text-slate-400 font-medium text-sm">Sign in to your dashboard</p>
       </div>
 

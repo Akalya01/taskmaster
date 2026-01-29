@@ -1,4 +1,4 @@
-name: Build & Deploy
+name: Build & Deploy Frontend + Backend
 
 on:
   push:
@@ -18,11 +18,27 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build Docker image
-        run: docker build -f ./frontend/Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend-app-poc:latest ./frontend
+      # ================= FRONTEND =================
+      - name: Build frontend image
+        run: |
+          docker build \
+            -f ./frontend/Dockerfile \
+            -t ${{ secrets.DOCKERHUB_USERNAME }}/frontend-app-poc:latest \
+            ./frontend
 
-      - name: Push Docker image
+      - name: Push frontend image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/frontend-app-poc:latest
+
+      # ================= BACKEND =================
+      - name: Build backend image
+        run: |
+          docker build \
+            -f ./backend/Dockerfile \
+            -t ${{ secrets.DOCKERHUB_USERNAME }}/backend-app-poc:latest \
+            ./backend
+
+      - name: Push backend image
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend-app-poc:latest
 
   deploy:
     needs: build
@@ -33,9 +49,10 @@ jobs:
         uses: appleboy/ssh-action@v0.1.5
         with:
           host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          username: ${{ secrets.SERVER_USER }}   # usually root
+          key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
+            echo "=== Deploying Frontend ==="
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/frontend-app-poc:latest
             docker stop frontend-poc || true
             docker rm frontend-poc || true
@@ -44,3 +61,13 @@ jobs:
               -p 4000:4000 \
               --restart unless-stopped \
               ${{ secrets.DOCKERHUB_USERNAME }}/frontend-app-poc:latest
+
+            echo "=== Deploying Backend ==="
+            docker pull ${{ secrets.DOCKERHUB_USERNAME }}/backend-app-poc:latest
+            docker stop backend-poc || true
+            docker rm backend-poc || true
+            docker run -d \
+              --name backend-poc \
+              -p 5000:5000 \
+              --restart unless-stopped \
+              ${{ secrets.DOCKERHUB_USERNAME }}/backend-app-poc:latest

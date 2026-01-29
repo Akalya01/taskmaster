@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "http://172.235.29.67:5000";
 
 export async function api(
   url: string,

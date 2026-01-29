@@ -78,7 +78,7 @@ export default function Profile() {
       <div className="max-w-4xl mx-auto space-y-10 animate-in fade-in slide-in-from-bottom-4 duration-700 ease-out">
         <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 bg-white p-8 rounded-[2rem] shadow-sm border border-slate-100">
           <div>
-            <h1 className="text-4xl font-black text-slate-900 tracking-tight leading-none mb-3">Profile Information .</h1>
+            <h1 className="text-4xl font-black text-slate-900 tracking-tight leading-none mb-3">Profile Information </h1>
             <p className="text-slate-400 text-base font-medium">Manage your personal details and account security.</p>
           </div>
         </header>

@@ -18,7 +18,7 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # ================= FRONTEND =================
+      # ---------- FRONTEND ----------
       - name: Build frontend image
         run: |
           docker build \
@@ -29,13 +29,13 @@ jobs:
       - name: Push frontend image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/frontend-app-poc:latest
 
-      # ================= BACKEND =================
+      # ---------- BACKEND (IMPORTANT: BACKEND in caps) ----------
       - name: Build backend image
         run: |
           docker build \
-            -f ./backend/Dockerfile \
+            -f ./BACKEND/Dockerfile \
             -t ${{ secrets.DOCKERHUB_USERNAME }}/backend-app-poc:latest \
-            ./backend
+            ./BACKEND
 
       - name: Push backend image
         run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend-app-poc:latest
@@ -49,10 +49,10 @@ jobs:
         uses: appleboy/ssh-action@v0.1.5
         with:
           host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}   # usually root
+          username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_SSH_KEY }}
           script: |
-            echo "=== Deploying Frontend ==="
+            # ---------- FRONTEND ----------
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/frontend-app-poc:latest
             docker stop frontend-poc || true
             docker rm frontend-poc || true
@@ -62,7 +62,7 @@ jobs:
               --restart unless-stopped \
               ${{ secrets.DOCKERHUB_USERNAME }}/frontend-app-poc:latest
 
-            echo "=== Deploying Backend ==="
+            # ---------- BACKEND ----------
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/backend-app-poc:latest
             docker stop backend-poc || true
             docker rm backend-poc || true
